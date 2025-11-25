@@ -1,0 +1,4 @@
+langgraph==1.0.3
+langchain_openai
+mcp==1.22.0
+python-dotenv==1.2.1

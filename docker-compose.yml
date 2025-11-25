@@ -1,0 +1,18 @@
+services:
+  playwright-mcp:
+    image: mcr.microsoft.com/playwright/mcp:latest
+    container_name: playwright-mcp
+    init: true
+    restart: unless-stopped
+    ports:
+      - "8931:8931"
+    command:
+      [
+        "--browser",
+        "chromium",
+        "--headless",
+        "--no-sandbox",
+        "--port",
+        "8931",
+      ]
+    shm_size: "2gb"
