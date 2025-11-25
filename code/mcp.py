@@ -5,7 +5,7 @@ from fastmcp.client import Client
 from fastmcp.client.transports import StreamableHttpTransport
 
 
-async def main():
+async def main(page_url: str) -> str:
 
     transport = StreamableHttpTransport("http://localhost:8931")
 
@@ -15,17 +15,14 @@ async def main():
 
         await client.call_tool(
             "browser_navigate",
-            {
-                # "url": "https://www.zapimoveis.com.br/"
-                "url": "https://www.kabum.com.br/"
-            },
+            {"url": page_url},
         )
 
         await client.call_tool("browser_wait_for", {"time": 10})
 
         snapshot = await client.call_tool("browser_snapshot", {})
 
-        print(snapshot.content)
+        return snapshot.content
 
         # result = await client.call_tool(
         #     "browser_take_screenshot", {"fullPage": True, "type": "png"}
@@ -40,6 +37,3 @@ async def main():
         # raw_bytes = base64.b64decode(image_content.data)
         # with open("screenshot.png", "wb") as f:
         #     f.write(raw_bytes)
-
-
-asyncio.run(main())
