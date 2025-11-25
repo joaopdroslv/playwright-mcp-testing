@@ -1,12 +1,10 @@
 import base64
-import logging
 import os
+from code.logs import logger
 
 from dotenv import load_dotenv
 from fastmcp.client import Client
 from fastmcp.client.transports import StreamableHttpTransport
-
-logger = logging.getLogger(__name__)
 
 load_dotenv()
 

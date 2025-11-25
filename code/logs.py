@@ -5,8 +5,10 @@ log_format = (
     "%(funcName)s | %(message)s"
 )
 
-logging.basicConfig(
-    level=logging.INFO,
-    format=log_format,
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
+handler = logging.StreamHandler()
+handler.setFormatter(logging.Formatter(log_format, "%Y-%m-%d %H:%M:%S"))
+
+logger = logging.getLogger("myapp")
+logger.setLevel(logging.INFO)
+logger.addHandler(handler)
+logger.propagate = False
