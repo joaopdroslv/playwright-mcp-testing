@@ -1,6 +1,7 @@
 import asyncio
 from code.gpt_model import gpt_model
 from code.mcp import BrowserMCP, simple_implementation
+from code.schemas import ProductList
 
 from langchain_core.messages import AIMessage
 
@@ -26,7 +27,7 @@ async def main():
         )
 
         ref = response.content
-        print(f"Element ref={ref}")
+        # print(f"Found element ref={ref}")
 
         snapshot = await browser_mcp.query_product(
             url="https://www.kabum.com.br/",
@@ -34,7 +35,9 @@ async def main():
             query="AMD Ryzen 7 5800X3D",
         )
 
-        response: AIMessage = gpt_model.invoke(
+        product_model = gpt_model.with_structured_output(schema=ProductList)
+
+        response = product_model.invoke(
             f"""
         You will receive a page snapshot from an ecommerce website.
         Extract every product listed on the page.
@@ -52,7 +55,12 @@ async def main():
         """
         )
 
-        print(response.content)
+        structured_output: ProductList = response
+        product_list = structured_output.products
+
+        print(f"Found a total of [ {len(product_list)} ] products")
+        for i, p in enumerate(product_list):
+            print(f"[ {i + 1} ] {p.name.split(",")[0]} - {p.price}")
 
 
 if __name__ == "__main__":
