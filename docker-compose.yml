@@ -8,11 +8,20 @@ services:
       - "8931:8931"
     command:
       [
-        "--browser",
-        "chromium",
+        "--browser", "chromium",
         "--headless",
         "--no-sandbox",
-        "--port",
-        "8931",
+        "--port", "8931",
+        "--allowed-hosts", "*"
       ]
     shm_size: "2gb"
+
+  workflow:
+    build:
+      context: .
+      dockerfile: workflow.dockerfile
+    container_name: workflow
+    depends_on:
+      - playwright-mcp
+    volumes:
+      - ./output:/app/output
