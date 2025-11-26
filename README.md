@@ -17,14 +17,14 @@ Follow the steps below to set up the environment and run the example.
 1. Configure your `.env` file using `.env.example` as a reference.
    Make sure to set your `OPENAI_API_KEY`.
 
-2. Build all containers:
+2. Start the Playwright MCP service:
     ```bash
-    docker compose up --build
+    docker compose up --build -d playwright-mcp
     ```
 
-3. Start the Playwright MCP service:
+3. Build the workflow service:
     ```bash
-    docker compose up playwright-mcp -d
+    docker compose build
     ```
 
 4. Then run the workflow service (It is not a persistent service):

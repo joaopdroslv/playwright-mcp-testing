@@ -25,3 +25,4 @@ services:
       - playwright-mcp
     volumes:
       - ./output:/app/output
+    command: ["python", "-m", "code.main"]
