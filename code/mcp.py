@@ -18,8 +18,9 @@ class BrowserMCP:
         async with Client(self.transport) as client:
             await client.call_tool("browser_navigate", {"url": url})
             await client.call_tool("browser_wait_for", {"time": 5})
-            snapshot = await client.call_tool("browser_snapshot", {})
-        return snapshot.content
+            result = await client.call_tool("browser_snapshot", {})
+            snapshot = result.content[0].text
+        return snapshot
 
     async def take_screenshot(self, url: str, filename: str) -> None:
         async with Client(self.transport) as client:
@@ -55,5 +56,6 @@ class BrowserMCP:
             )
             await client.call_tool("browser_press_key", {"key": "Enter"})
             await client.call_tool("browser_wait_for", {"time": 5})
-            snapshot = await client.call_tool("browser_snapshot", {})
-        return snapshot.content
+            result = await client.call_tool("browser_snapshot", {})
+            snapshot = result.content[0].text
+        return snapshot
