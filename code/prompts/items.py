@@ -74,3 +74,47 @@ Extraction rules:
 
 Respond ONLY with the JSON object matching the declared schema — no explanations, no extra text.
 """
+
+
+get_pagination_prompt = """
+You will receive a page snapshot of a real-estate listing page.
+
+Your goal is to extract ONLY pagination information and return a JSON object matching the following schema:
+
+{
+    "total": <int>,
+    "first_page_number": <int>,
+    "last_page_number": <int>,
+    "page_url_pattern": "<string containing PAGE_NUMBER>"
+}
+
+Definitions:
+- "total": the total number of pages available in the pagination UI.
+- "first_page_number": the smallest page number shown (usually 1).
+- "last_page_number": the largest page number shown.
+- "page_url_pattern": a generic URL template derived from the pagination links.
+  Replace the page-specific number with the literal string "PAGE_NUMBER".
+  The pattern must work for all pages.
+
+Extraction rules:
+1. Consider only visible pagination elements: numerical page links (e.g. "1", "2", "3", "10"), “Próximo/Next”, “Anterior/Previous”.
+2. Ignore non-pagination anchors such as property cards, filters, sorting links, breadcrumbs, or unrelated navigation.
+3. Extract all numeric page links and convert them to integers.
+4. Determine `first_page_number` and `last_page_number` from the collected numeric links.
+5. `total` must equal the highest page number detected.
+6. To build `page_url_pattern`:
+   - Identify at least one pagination anchor containing a page number.
+   - Replace ONLY the page number portion of the URL with "PAGE_NUMBER".
+   - Preserve the rest of the URL exactly as shown.
+   - If the href is relative, convert it to an absolute URL using the page origin included in the snapshot.
+7. If no pagination is detected, return:
+   {
+       "total": 1,
+       "first_page_number": 1,
+       "last_page_number": 1,
+       "page_url_pattern": ""
+   }
+
+Output rules:
+- Respond ONLY with valid JSON exactly matching the schema above.
+- Do NOT include explanations, HTML, or any additional text."""
