@@ -9,11 +9,13 @@ class ItemsWorkflowSite(BaseModel):
     url: str
 
 
+# Model structured output
 class ItemsOutput(BaseModel):
 
     items_urls: List[str]
 
 
+# Model structured output
 class ItemDetails(BaseModel):
 
     ref: str  # ID field
@@ -33,7 +35,7 @@ class ItemDetails(BaseModel):
     bathroom_count: int
     commom_room_count: int
     kitchen_count: int
-    has_service_area: bool
+    has_service_area: str = Field(examples=["Sim", "Não"])
 
     # Area
     total_area: float
