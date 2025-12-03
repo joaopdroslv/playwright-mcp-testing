@@ -5,8 +5,8 @@ from pydantic import BaseModel, Field
 
 class PageItem(BaseModel):
 
-    page_number: int
-    page_url: str
+    number: int
+    url: str
 
 
 class Pagination(BaseModel):

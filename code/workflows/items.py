@@ -54,10 +54,10 @@ async def items_workflow() -> None:
 
         for page in pagination.pages:
 
-            logger.info(f">>> Processing page [ {page.page_number} ]")
+            logger.info(f">>> Processing page [ {page.number} ]")
 
             items_listing_page_snapshot = await browser_mcp.extract_snapshot(
-                page_url=site.url
+                page_url=page.url
             )
 
             full_prompt = concat_prompt_n_snapshot(
@@ -70,7 +70,7 @@ async def items_workflow() -> None:
                 item_number = i + 1
 
                 logger.info(
-                    f">>> Acessing item [ {item_number} ] details, from page [ {page.page_number} ]"
+                    f">>> Acessing item [ {item_number} ] details, from page [ {page.number} ]"
                 )
 
                 item_details_page_snapshot = await browser_mcp.extract_snapshot(
@@ -98,7 +98,7 @@ async def items_workflow() -> None:
 
             # ---------- codeblock start ----------
             # NOTE: Remove this code later, only for testing
-            if page.page_number == stop_page:
+            if page.number == stop_page:
                 break
             # ---------- codeblock end ----------
 

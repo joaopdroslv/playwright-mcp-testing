@@ -36,7 +36,7 @@ def handle_pagination(page_snapshot: str) -> Pagination:
     for page_number in range(start, end + 1):
 
         page_url = url_pattern.replace("PAGE_NUMBER", str(page_number))
-        page_item = PageItem(page_number=page_number, page_url=page_url)
+        page_item = PageItem(number=page_number, url=page_url)
         pagination.pages.append(page_item)
 
     return pagination
