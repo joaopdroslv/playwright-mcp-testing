@@ -11,20 +11,21 @@ PLAYWRIGHT_MCP_URL = os.getenv("PLAYWRIGHT_MCP_URL")
 
 
 class BrowserMCP:
+
     def __init__(self, base_url: str = PLAYWRIGHT_MCP_URL):
         self.transport = StreamableHttpTransport(base_url)
 
-    async def extract_snapshot(self, url: str) -> str:
+    async def extract_snapshot(self, page_url: str) -> str:
         async with Client(self.transport) as client:
-            await client.call_tool("browser_navigate", {"url": url})
+            await client.call_tool("browser_navigate", {"url": page_url})
             await client.call_tool("browser_wait_for", {"time": 5})
             result = await client.call_tool("browser_snapshot", {})
             snapshot = result.content[0].text
         return snapshot
 
-    async def take_screenshot(self, url: str, filename: str) -> None:
+    async def take_screenshot(self, page_url: str, filename: str) -> None:
         async with Client(self.transport) as client:
-            await client.call_tool("browser_navigate", {"url": url})
+            await client.call_tool("browser_navigate", {"url": page_url})
             await client.call_tool("browser_wait_for", {"time": 5})
             result = await client.call_tool(
                 "browser_take_screenshot", {"fullPage": True, "type": "png"}
@@ -35,9 +36,9 @@ class BrowserMCP:
                     with open(filename, "wb") as f:
                         f.write(raw_bytes)
 
-    async def query_product(self, url: str, input_ref: str, query: str) -> str:
+    async def query_product(self, page_url: str, input_ref: str, query: str) -> str:
         async with Client(self.transport) as client:
-            await client.call_tool("browser_navigate", {"url": url})
+            await client.call_tool("browser_navigate", {"url": page_url})
             await client.call_tool("browser_wait_for", {"time": 5})
             await client.call_tool(
                 "browser_click",

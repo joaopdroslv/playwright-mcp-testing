@@ -3,7 +3,7 @@ from code.logs import logger
 from code.mcp import BrowserMCP
 from code.prompts.items import found_items_prompt, get_item_details_prompt
 from code.schemas.items import ItemDetailed, ItemsOutput
-from code.utils import make_dir, write_into_xlsx
+from code.utils.file import make_dir, write_dataframe_into_file
 from datetime import datetime
 
 
@@ -18,7 +18,7 @@ async def items_workflow() -> None:
     logger.info(run_id)
     logger.info(run_dir_path)
 
-    snapshot = await browser_mcp.extract_snapshot(url=PAGE_URL)
+    snapshot = await browser_mcp.extract_snapshot(page_url=PAGE_URL)
 
     items_model = gpt_model.with_structured_output(schema=ItemsOutput)
 
@@ -44,7 +44,7 @@ async def items_workflow() -> None:
             logger.info("[ERROR] Item has no /imovel in its URL")
             continue
 
-        snapshot = await browser_mcp.extract_snapshot(url=item.url)
+        snapshot = await browser_mcp.extract_snapshot(page_url=item.url)
 
         full_prompt = (
             get_item_details_prompt
@@ -57,9 +57,13 @@ async def items_workflow() -> None:
 
         item_ref = response.ref
         scheenshot_filename = run_dir_path + f"/{run_id}_{item_ref}.png"
-        await browser_mcp.take_screenshot(url=item.url, filename=scheenshot_filename)
+        await browser_mcp.take_screenshot(page_url=item.url, filename=scheenshot_filename)
 
         items_detailed_list.append(response.model_dump())
 
-    output_xlsx_filename = run_dir_path + f"/{run_id}_output.xlsx"
-    write_into_xlsx(output=items_detailed_list, filename=output_xlsx_filename)
+    output_xlsx_filename = run_dir_path + f"/{run_id}_output"
+    write_dataframe_into_file(
+        output=items_detailed_list,
+        filename=output_xlsx_filename,
+        extension="xlsx",
+    )

@@ -10,7 +10,7 @@ async def products_workflow() -> None:
 
     PAGE_URL = "https://www.kabum.com.br/"
 
-    snapshot = await browser_mcp.extract_snapshot(url=PAGE_URL)
+    snapshot = await browser_mcp.extract_snapshot(page_url=PAGE_URL)
 
     response = gpt_model.invoke(
         f"""
@@ -30,7 +30,7 @@ async def products_workflow() -> None:
     ref = response.content
 
     snapshot = await browser_mcp.query_product(
-        url=PAGE_URL,
+        page_url=PAGE_URL,
         input_ref=ref,
         query="AMD Ryzen 7 5800X3D",
     )
