@@ -5,19 +5,8 @@ from code.mcp import BrowserMCP
 from code.prompts.items import found_items_prompt, get_item_details_prompt
 from code.schemas.items import ItemDetails, ItemsOutput, ItemsWorkflowSite
 from code.utils.file import make_dir, write_dataframe_into_file
+from code.utils.prompt import concat_prompt_n_snapshot
 from datetime import datetime
-
-
-def concat_prompt_n_snapshot(initial_prompt: str, snapshot: str) -> str:
-    """Helper function to concat partial prompts with it's relevant snapshot."""
-
-    return (
-        initial_prompt
-        + f"""
-    \nHere is the snapshot:
-    {snapshot}
-    """
-    )
 
 
 async def items_workflow() -> None:
