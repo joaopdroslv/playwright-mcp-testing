@@ -1,14 +1,43 @@
-# Simple Playwright MCP Integration (Python)
+# End-to-End Webscraping Workflow with Playwright MCP and LLM Calls
 
-This project demonstrates a minimal integration with Microsoft’s **Playwright MCP** using the `fastmcp` client.
+This project demonstrates a minimal end-to-end workflow using Playwright MCP (via a custom BrowserMCP wrapper) together with LLM calls to:
 
-## Overview
+- Extract snapshots from real estate listing pages
+- Parse items and item details using structured LLM output
+- Capture screenshots of each item
+- Export all extracted data into an .xlsx file
+- Organize the results under a unique runId directory
 
-Deprecated
+The implementation uses fastmcp, Playwright, and OpenAI structured outputs.
+
+## Project Flow
+
+The workflow (`items_workflow`) follows these steps:
+
+1. Create a unique `runId` output directory
+2. For each configured site (`ITEMS_WORKFLOW_SITES`):
+    - Load the initial page
+    - Extract a snapshot
+    - Detect and iterate pagination
+3. For each listing page:
+    - Extract a snapshot
+    - Use an LLM (`PageItemsOutput`) to detect all items URLs
+4. For each item:
+    - Extract full detail snapshot
+    - Use an LLM (`ItemDetailsOutput`) to parse structured item data
+    - Save a screenshot with a unique ID
+    - Append the parsed item to the results list
+
+5. After finishing all pages:
+    - Write all collected data into a single Excel file inside the `runId` folder
 
 ## Output Example
 
-Deprecated
+You can find an output example in the `example` dir in the project root.
+
+A run generates:
+- Dozens of screenshots (one per extracted item)
+- One Excel spreadsheet containing all parsed item data
 
 ## How to Run
 
